@@ -1,8 +1,8 @@
-# [Try-On App](try-on.ollayor.uz)
+# [Try-On AI](https://ollayor.uz/try-on.ollayor.uz)
 
-This is a Virtual Try-On application that allows users to upload images of garments and human models, describe the garment, and see how it looks on the model using the Replicate API.
+This project allows users to virtually try on garments using AI by uploading garment and human images.
 
-# 
+[![Try-on AI](./public/screenshot.png)](https://try-on.ollayor.uz)
 
 ## Features
 
