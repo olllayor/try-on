@@ -48,7 +48,9 @@ This project allows users to virtually try on garments using AI by uploading gar
     # or
     yarn dev
 
-4. Open your browser and navigate to httt://localhost:3000
+4. Create [Replicate API Token](https://replicate.com)
+
+5. Open your browser and navigate to httt://localhost:3000
 
 ### CONTRIBUTING
 
