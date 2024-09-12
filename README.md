@@ -1,4 +1,4 @@
-# Virtual Try-On App
+# (Try-On App)[try-on.ollayor.uz]
 
 This is a Virtual Try-On application that allows users to upload images of garments and human models, describe the garment, and see how it looks on the model using the Replicate API.
 
@@ -55,6 +55,6 @@ This is a Virtual Try-On application that allows users to upload images of garme
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-# LICENSE
+### LICENSE
 
 This project is licensed under the MIT License.
