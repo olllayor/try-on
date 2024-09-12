@@ -13,7 +13,6 @@ This project allows users to virtually try on garments using AI by uploading gar
 - Display loading state and error messages
 
 ## Technologies Used
-
 - React
 - Next.js
 - Chakra UI
