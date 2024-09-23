@@ -1,6 +1,5 @@
-// pages/index.js
-import { useState } from 'react';
-import { ChakraProvider, Box, VStack, Heading, Text, Alert, AlertIcon, Code, Input, useToast } from '@chakra-ui/react';
+import { useState, useCallback } from 'react';
+import { ChakraProvider, Box, VStack, Heading, Text, Alert, AlertIcon, useToast, Select, Button } from '@chakra-ui/react';
 import ImageUpload from '../components/ImageUpload';
 import GarmentDescription from '../components/GarmentDescription';
 import TryOnResult from '../components/TryOnResult';
@@ -15,10 +14,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [replicateToken, setReplicateToken] = useState('');
+  const [category, setCategory] = useState('upper_body');
+  const [history, setHistory] = useState([]);
 
-  const toast = useToast(); // Initialize the toast variable
+  const toast = useToast();
 
-  const handleTryOn = async () => {
+  const handleTryOn = useCallback(async () => {
+    if (!garmImg || !humanImg || !garmentDes || !replicateToken) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
     const formData = new FormData();
@@ -26,6 +32,7 @@ export default function Home() {
     formData.append('human_img', humanImg);
     formData.append('garment_des', garmentDes);
     formData.append('replicate_token', replicateToken);
+    formData.append('category', category);
 
     try {
       const response = await fetch('/api/try-on', {
@@ -33,34 +40,43 @@ export default function Home() {
         body: formData,
       });
 
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message || 'An error occurred');
-        }
-        setResult(data.result);
-        // Display success toast
-        toast({
-          title: 'Virtual try-on successful',
-          description: 'The virtual try-on result has been received.',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        });
-        setError('');
-      } else {
-        const text = await response.text();
-        console.error('Non-JSON response:', text);
-        throw new Error('Received non-JSON response from server');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      setResult(data.result);
+      setHistory(prev => [...prev, { garmImg, humanImg, garmentDes, category, result: data.result }]);
+      toast({
+        title: 'Virtual try-on successful',
+        description: 'The virtual try-on result has been received.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error('Error:', error);
-      setError(`Error: ${error.message}. Please check the console for more details.`);
+      setError(`Error: ${error.message}. Please try again.`);
+      toast({
+        title: 'Error',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [garmImg, humanImg, garmentDes, replicateToken, category, toast]);
+
+  const handleClearAll = useCallback(() => {
+    setGarmImg(null);
+    setHumanImg(null);
+    setGarmentDes('');
+    setResult('');
+    setError('');
+    setCategory('upper_body');
+  }, []);
 
   return (
     <ChakraProvider>
@@ -71,28 +87,23 @@ export default function Home() {
           {error && (
             <Alert status="error">
               <AlertIcon />
-              <VStack align="start">
-                <Text>{error}</Text>
-                <Code>Please check the browser console for more details.</Code>
-              </VStack>
+              <Text>{error}</Text>
             </Alert>
           )}
-          {/* {result && (
-            <Alert status="success">
-              <AlertIcon />
-              <VStack align="start">
-                <Text>Virtual try-on result received successfully!</Text>
-              </VStack>
-            </Alert>
-          )} */}
           <ReplicateTokenInput token={replicateToken} onTokenChange={setReplicateToken} />
+          <Select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="upper_body">Upper Body</option>
+            <option value="lower_body">Lower Body</option>
+            <option value="dresses">Dresses</option>
+          </Select>
           <ImageUpload label="Upload Garment Image" onImageUpload={setGarmImg} />
           <ImageUpload label="Upload Human Image" onImageUpload={setHumanImg} />
           <GarmentDescription onDescriptionChange={setGarmentDes} onSubmit={handleTryOn} isLoading={isLoading} />
+          <Button onClick={handleClearAll}>Clear All</Button>
           <TryOnResult result={result} isLoading={isLoading} />
         </VStack>
       </Box>
       <Examples />
     </ChakraProvider>
   );
-};
+}

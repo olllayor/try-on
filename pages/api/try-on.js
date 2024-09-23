@@ -1,8 +1,6 @@
-// pages/api/try-on.js
 import Replicate from "replicate";
 import { IncomingForm } from 'formidable';
 import fs from 'fs';
-
 
 export const config = {
   api: {
@@ -29,10 +27,10 @@ export default async function handler(req, res) {
 
         const garm_img = files.garm_img?.[0] || files.garm_img;
         const human_img = files.human_img?.[0] || files.human_img;
-        const { garment_des, replicate_token } = fields;
+        const { garment_des, replicate_token, category } = fields;
 
-        if (!garm_img || !human_img || !garment_des) {
-          console.error('Missing fields:', { garm_img: !!garm_img, human_img: !!human_img, garment_des: !!garment_des });
+        if (!garm_img || !human_img || !garment_des || !category) {
+          console.error('Missing fields:', { garm_img: !!garm_img, human_img: !!human_img, garment_des: !!garment_des, category: !!category });
           return res.status(400).json({ message: 'Missing required fields' });
         }
 
@@ -55,6 +53,12 @@ export default async function handler(req, res) {
               garm_img: `data:${garm_img.mimetype};base64,${garmImgBase64}`,
               human_img: `data:${human_img.mimetype};base64,${humanImgBase64}`,
               garment_des: garment_des[0] || garment_des,
+              category: category[0] || category,
+              crop: false,
+              seed: 42,
+              steps: 30,
+              force_dc: false,
+              mask_only: false,
             },
           }
         );
