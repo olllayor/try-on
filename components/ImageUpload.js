@@ -9,10 +9,10 @@ export default function ImageUpload({ label, onImageUpload }) {
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
+      if (file.size > 10 * 1024 * 1024) {
         toast({
           title: 'File too large',
-          description: 'Please upload an image smaller than 5MB.',
+          description: 'Please upload an image smaller than 10MB.',
           status: 'error',
           duration: 3000,
           isClosable: true,

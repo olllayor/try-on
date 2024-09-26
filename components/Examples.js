@@ -2,37 +2,38 @@ import React from 'react';
 import { Box, Heading, SimpleGrid, Image } from '@chakra-ui/react';
 
 const Examples = () => {
-    // Array of example image URLs
-    const exampleImages = [
-        'image.png',
-        '4.png',
-        '2.png',
-        '6.png',
-        'image1.png',
-        '18.jpg',
-        '5.png',
-        '8.png',
-        'image2.png',
-        '19.jpg',
-        '3.png',
-        '7.png',
+  const exampleImages = [
+    'image.png', //1
+    'image1.png',   //5
+    'image2.png', //9
+    '4.png',    //2
+    '19.jpg',     //10
+    '18.jpg',     //6
+    '2.png',      //3
+    '5.png',      //7
+    '3.png',        //11
+    '6.png',      //4
+    '8.png',      //8
+        '7.png',        //12
+    ];
 
-    // Add more example image URLs as needed
-  ];
-
-  return (
-    <Box maxWidth="800px" margin="auto" padding={8}>
-      <Heading>Examples</Heading>
-      <SimpleGrid columns={4} spacing={4}>
-        {exampleImages.map((url, index) => (
-          <Image 
-          key={index} 
-          src={url} 
-          alt={`Example ${index + 1}`} />
-        ))}
-      </SimpleGrid>
-    </Box>
-  );
+    return (
+        <Box>
+            <Heading size="md" mb={4}>Examples</Heading>
+            <SimpleGrid columns={3} spacing={3} mt={100}>
+                {exampleImages.map((url, index) => (
+                    <Image 
+                        key={index} 
+                        src={url} 
+                        alt={`Example ${index + 1}`}
+                        objectFit="cover"
+                        width="100%"
+                        height="100px"
+                    />
+                ))}
+            </SimpleGrid>
+        </Box>
+    );
 };
 
 export default Examples;

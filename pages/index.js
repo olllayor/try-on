@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
-import { ChakraProvider, Box, VStack, Heading, Text, Alert, AlertIcon, useToast, Select, Button } from '@chakra-ui/react';
+import { ChakraProvider, Box, Flex, VStack, Heading, Text, Alert, AlertIcon, useToast, Select, Button, SimpleGrid, Link, Icon } from '@chakra-ui/react';
 import ImageUpload from '../components/ImageUpload';
 import GarmentDescription from '../components/GarmentDescription';
 import TryOnResult from '../components/TryOnResult';
 import ReplicateTokenInput from '../components/ReplicateTokenInput';
 import Examples from '@/components/Examples';
+import Footer from '@/components/Footer';
+
 
 export default function Home() {
   const [garmImg, setGarmImg] = useState(null);
@@ -80,30 +82,39 @@ export default function Home() {
 
   return (
     <ChakraProvider>
-      <Box maxWidth="800px" margin="auto" padding={8}>
-        <VStack spacing={8}>
-          <Heading>Virtual Try On App</Heading>
-          <Text>Upload a garment image and a human image, then describe the garment to see how it looks!</Text>
-          {error && (
-            <Alert status="error">
-              <AlertIcon />
-              <Text>{error}</Text>
-            </Alert>
-          )}
-          <ReplicateTokenInput token={replicateToken} onTokenChange={setReplicateToken} />
-          <Select value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="upper_body">Upper Body</option>
-            <option value="lower_body">Lower Body</option>
-            <option value="dresses">Dresses</option>
-          </Select>
-          <ImageUpload label="Upload Garment Image" onImageUpload={setGarmImg} />
-          <ImageUpload label="Upload Human Image" onImageUpload={setHumanImg} />
-          <GarmentDescription onDescriptionChange={setGarmentDes} onSubmit={handleTryOn} isLoading={isLoading} />
-          <Button onClick={handleClearAll}>Clear All</Button>
-          <TryOnResult result={result} isLoading={isLoading} />
-        </VStack>
+      <Box position="relative" minHeight="100vh">
+        <Flex maxWidth="1200px" margin="auto" padding={8}>
+          <Box flex="2" pr={8}>
+            <VStack spacing={8} align="stretch">
+              <Heading>Virtual Try On App</Heading>
+              <Text>Upload a garment image and a human image, then describe the garment to see how it looks!</Text>
+              {error && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <Text>{error}</Text>
+                </Alert>
+              )}
+              <ReplicateTokenInput token={replicateToken} onTokenChange={setReplicateToken} />
+              <Select value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="upper_body">Upper Body</option>
+                <option value="lower_body">Lower Body</option>
+                <option value="dresses">Dresses</option>
+              </Select>
+              <SimpleGrid columns={2} spacing={4}>
+                <ImageUpload label="Upload Garment Image" onImageUpload={setGarmImg} />
+                <ImageUpload label="Upload Human Image" onImageUpload={setHumanImg} />
+              </SimpleGrid>
+              <GarmentDescription onDescriptionChange={setGarmentDes} onSubmit={handleTryOn} isLoading={isLoading} />
+              <Button onClick={handleClearAll}>Clear All</Button>
+              <TryOnResult result={result} isLoading={isLoading} />
+            </VStack>
+          </Box>
+          <Box flex="1.5">
+            <Examples />
+          </Box>
+        </Flex>
+        <Footer />
       </Box>
-      <Examples />
     </ChakraProvider>
   );
 }

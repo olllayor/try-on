@@ -16,7 +16,7 @@ export default function GarmentDescription({ onDescriptionChange, onSubmit, isLo
 
   return (
     <VStack spacing={2} align="stretch">
-      <FormControl>
+      <FormControl isRequired>
         <FormLabel>Describe the garment</FormLabel>
         <Textarea
           value={description}
