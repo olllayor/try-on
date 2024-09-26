@@ -18,8 +18,7 @@ const Examples = () => {
     ];
 
     return (
-        <Box>
-            
+        <Box>            
             <SimpleGrid columns={3} spacing={3} mt={100}>
                 {exampleImages.map((url, index) => (
                     <Image 
