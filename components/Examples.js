@@ -19,7 +19,7 @@ const Examples = () => {
 
     return (
         <Box>
-            <Heading size="md" mb={4}>Examples</Heading>
+            
             <SimpleGrid columns={3} spacing={3} mt={100}>
                 {exampleImages.map((url, index) => (
                     <Image 
